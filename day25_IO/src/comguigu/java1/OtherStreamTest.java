@@ -47,8 +47,6 @@ public class OtherStreamTest {
                     break;
                 }
                 System.out.println(data.toUpperCase());
-
-
             }
         } catch (IOException e) {
             e.printStackTrace();

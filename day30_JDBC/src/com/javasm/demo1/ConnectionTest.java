@@ -1,7 +1,7 @@
-package javasm.demo1;
+package com.javasm.demo1;
 
 import org.junit.jupiter.api.Test;
-import javasm.util.Utils;
+import com.javasm.util.Utils;
 
 import java.sql.Connection;
 import java.sql.SQLException;

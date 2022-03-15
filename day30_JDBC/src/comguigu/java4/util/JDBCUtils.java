@@ -3,6 +3,8 @@ package comguigu.java4.util;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.DruidDataSourceFactory;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
+import org.apache.commons.dbcp.BasicDataSource;
+import org.apache.commons.dbcp.BasicDataSourceFactory;
 import org.apache.commons.dbutils.DbUtils;
 
 import java.io.IOException;
@@ -23,10 +25,14 @@ import java.util.Properties;
  * @create: 2022-03-12 20:23
  */
 public class JDBCUtils {
-    public static ComboPooledDataSource comboPooledDataSource = new ComboPooledDataSource( "goc3p0" );
+    public static ComboPooledDataSource c3p0PooledDataSource = new ComboPooledDataSource( "goc3p0" );
     public static DruidDataSource druidDataSource = null;
+    public static BasicDataSource basicDataSource =null;
     public static Properties properties =null ;
 
+    /**
+     * 德鲁伊连接池初始化
+     */
     static {
         final InputStream inputStream = ClassLoader.getSystemResourceAsStream("druid.properties");
 
@@ -45,6 +51,26 @@ public class JDBCUtils {
         }
     }
 
+    /**
+     * DBCP
+     */
+    static {
+        final InputStream inputStream = ClassLoader.getSystemResourceAsStream("dbcp.properties");
+
+        try {
+            properties = new Properties();
+            properties.load(inputStream);
+            basicDataSource = (BasicDataSource) BasicDataSourceFactory.createDataSource(properties);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally{
+            try {
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 
     private JDBCUtils(){
@@ -52,16 +78,33 @@ public class JDBCUtils {
 
 
 
-
-
     /**
-     *  获取数据库连接
+     *  c3p0连接池获取数据库连接
      * @return
      * @throws SQLException
      */
     public static Connection getConnectionC3p0() throws SQLException {
-        return comboPooledDataSource.getConnection();
+        return c3p0PooledDataSource.getConnection();
     }
+
+    /**
+     * DBCP连接池获取数据库连接
+     * @return
+     * @throws SQLException
+     */
+    public static Connection getConnectionDBCP() throws SQLException {
+        return basicDataSource.getConnection();
+    }
+
+    /**
+     *  Druid连接池获取数据库连接
+     * @return
+     * @throws SQLException
+     */
+    public static Connection getConnectionDruid() throws SQLException {
+        return druidDataSource.getConnection();
+    }
+
 
     /**
      *  资源的关闭
@@ -103,8 +146,5 @@ public class JDBCUtils {
     public static void closeResource1(Connection connection,PreparedStatement preparedStatement ,ResultSet resultSet){
         DbUtils.closeQuietly(connection,preparedStatement,resultSet);
     }
-
-
-
 
 }

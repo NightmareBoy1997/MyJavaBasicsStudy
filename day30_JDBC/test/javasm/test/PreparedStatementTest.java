@@ -1,7 +1,7 @@
 package javasm.test;
 
+import comguigu.java.demo.java3.util.JDBCUtils;
 import org.junit.jupiter.api.Test;
-import javasm.util.Utils;
 
 import java.util.Scanner;
 
@@ -20,7 +20,7 @@ public class PreparedStatementTest {
     @Test
     public void addTest(){
         String sql = "insert into tb_userinfo(name,gender,phone)VALUES(?,?,?)";
-        Utils.update(sql , "王康","男","13021348575");
+        JDBCUtils.update(sql , "王康","男","13021348575");
     }
 
     @Test

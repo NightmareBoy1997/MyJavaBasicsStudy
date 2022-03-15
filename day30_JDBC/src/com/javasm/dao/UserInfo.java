@@ -1,4 +1,4 @@
-package javasm.dao;
+package com.javasm.dao;
 
 import java.util.Date;
 

@@ -6,7 +6,6 @@ import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.dbcp.BasicDataSourceFactory;
 import org.junit.jupiter.api.Test;
 
-import javax.sql.DataSource;
 import java.io.FileInputStream;
 import java.lang.reflect.Field;
 import java.sql.*;
@@ -72,14 +71,14 @@ public class DBCPTest {
         return dataSource.getConnection();
     }
 
-    private static DataSource dataSource = null;
+    private static BasicDataSource dataSource = null;
 
     static {
         try {
             FileInputStream inputStream = new FileInputStream("src//dbcp.properties");
             Properties properties = new Properties();
             properties.load(inputStream);
-            dataSource = BasicDataSourceFactory.createDataSource(properties);
+            dataSource = (BasicDataSource) BasicDataSourceFactory.createDataSource(properties);
         } catch (Exception e) {
             e.printStackTrace();
         }

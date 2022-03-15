@@ -3,10 +3,7 @@ package comguigu.java4.demo;
 import comguigu.java4.bean.User;
 import comguigu.java4.util.JDBCUtils;
 import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.BeanHandler;
-import org.apache.commons.dbutils.handlers.BeanListHandler;
-import org.apache.commons.dbutils.handlers.MapHandler;
-import org.apache.commons.dbutils.handlers.MapListHandler;
+import org.apache.commons.dbutils.handlers.*;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
@@ -36,9 +33,9 @@ public class ApacheDBUtilsTest {
 
 //            testInsert();
 //            testQuery1();
-//            testQueryList();
+            testQueryList();
 //            testQueryMap();
-            testQueryMapList();
+//            testQueryMapList();
 
         } catch (Exception throwables) {
             throwables.printStackTrace();
@@ -103,8 +100,6 @@ public class ApacheDBUtilsTest {
         } finally {
             JDBCUtils.closeResource(connection,null , null );
         }
-
-
     }
 
 
@@ -147,8 +142,6 @@ public class ApacheDBUtilsTest {
         } finally {
             JDBCUtils.closeResource(connection,null , null );
         }
-
-
     }
 
 
@@ -156,7 +149,23 @@ public class ApacheDBUtilsTest {
      *  scalarHandler : 用于查询特殊值
      */
     public void testScalar(){
+        Connection conn = null;
+        try {
+            QueryRunner runner = new QueryRunner();
+            conn = JDBCUtils.getConnectionDruid();
 
+            String sql = "select count(*) from customers";
+
+            ScalarHandler handler = new ScalarHandler();
+
+            Long count = (Long) runner.query(conn, sql, handler);
+            System.out.println(count);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally{
+            JDBCUtils.closeResource(conn,null,null);
+
+        }
     }
 
 
