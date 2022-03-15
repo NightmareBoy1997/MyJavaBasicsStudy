@@ -24,7 +24,7 @@ public class BookStoreDaoImpl extends BaseDao implements BookStoreDao {
      * @param sql
      * @param objects
      */
-    public void updateBookStore(Connection connection, String sql, Object... objects) throws Exception {
+    public void updateBookStore(Connection connection, String sql, Object... objects) {
             update(connection,sql,objects);
     }
 
@@ -39,8 +39,23 @@ public class BookStoreDaoImpl extends BaseDao implements BookStoreDao {
     }
 
     @Override
-    public <T> List<T> queryAll(Class<T> clazz,String sql) throws Exception {
+    public <T> List<T> queryAll(Class<T> clazz,String sql) {
         return queryAllInstanceList(clazz,sql);
+    }
+
+    @Override
+    public Integer getValue(String sql) {
+        return getMethodValue(sql);
+    }
+
+    @Override
+    public <T> T getInstanceFo(Class<T> clazz, String sql) {
+        return (T) queryInstance(clazz,sql);
+    }
+
+    @Override
+    public void update(Connection connection ,String sql, Object... objects) {
+        updateTable(connection , sql ,objects);
     }
 
 

@@ -62,12 +62,26 @@ public class BookServerImpl implements BookStoreServer {
 
     }
 
-
+    @Override
+    public void update(Connection connection ,String sql, Object... objects) {
+        bookStoreDao.update(connection ,sql,  objects);
+    }
 
     @Override
-    public <T> List<T> queryAll() {
-//        bookStoreDao.queryList();
-        return null;
+    public Integer getValue(String sql) {
+        return bookStoreDao.getValue(sql);
+    }
+
+    @Override
+    public Book getInstanceFo(String sql) {
+        return bookStoreDao.getInstanceFo(Book.class,sql);
+    }
+
+    @Override
+    public  List<Book> queryAll() {
+        String sql = "SELECT id,title,author,price,sales,stock,img_path imgPath FROM books";
+
+        return bookStoreDao.queryAll(Book.class,sql) ;
     }
 
 //    @Override

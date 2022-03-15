@@ -58,6 +58,21 @@ public class UserServerImpl implements BookStoreServer {
 
     }
 
+    @Override
+    public void update(Connection connection, String sql, Object... objects) {
+
+    }
+
+    @Override
+    public Integer getValue(String sql) {
+        return bookStoreDao.getValue(sql);
+    }
+
+    @Override
+    public User getInstanceFo(String sql) {
+        return bookStoreDao.getInstanceFo(User.class,sql);
+    }
+
 
     @Override
     public  List<User>  queryAll() {

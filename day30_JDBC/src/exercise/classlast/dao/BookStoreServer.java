@@ -1,5 +1,6 @@
 package exercise.classlast.dao;
 
+import java.sql.Connection;
 import java.util.List;
 
 /**
@@ -18,9 +19,13 @@ public interface BookStoreServer {
      */
     void add();
 
+    void update(Connection connection , String sql, Object... objects);
 
     <T> List<T> queryAll();
 
 
+    Integer getValue(String sql);
+
+    <T> T getInstanceFo(String sql);
 
 }
