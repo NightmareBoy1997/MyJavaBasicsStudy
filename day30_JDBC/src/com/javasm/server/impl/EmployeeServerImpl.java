@@ -25,11 +25,8 @@ public class EmployeeServerImpl implements EmployeeServer {
     public int addEmployee(String sql,Object... objects) {
 
 
-
         final int number = employeeDao.addEmployee(sql, objects);
         return number;
     }
-
-
 
 }
