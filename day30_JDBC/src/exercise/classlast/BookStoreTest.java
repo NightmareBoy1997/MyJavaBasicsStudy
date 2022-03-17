@@ -5,8 +5,9 @@ import exercise.classlast.bean.User;
 import exercise.classlast.dao.BookStoreServer;
 import exercise.classlast.dao.impl.BookServerImpl;
 import exercise.classlast.dao.impl.UserServerImpl;
-import exercise.classlast.util.BookStoreUtils;
+import exercise.classlast.util.DruidUtils;
 import exercise.classlast.util.MD5Util;
+import org.apache.commons.dbutils.DbUtils;
 
 import java.sql.Connection;
 import java.util.List;
@@ -180,11 +181,10 @@ public class BookStoreTest {
      */
     public static void getMaxSales(){
         BookStoreServer bookStoreServer = new BookServerImpl();
-        String sql =  "SELECT id,title,author,price,sales,stock,img_path imgPath FROM books HAVING MAX(sales)";
-        final Book maxBook = bookStoreServer.getInstanceFo(sql);
+        String sql =  "SELECT id,title,author,price,sales,stock,img_path imgPath FROM books WHERE sales = (SELECT MAX(sales) FROM books)";
+        Book maxBook = bookStoreServer.getInstanceFo(sql);
 
         System.out.println(maxBook);
-
     }
 
 
@@ -198,20 +198,20 @@ public class BookStoreTest {
         String sql = "UPDATE books SET stock=100  WHERE stock <? ";
 
         try {
-            connection = BookStoreUtils.getConnection();
+            connection = DruidUtils.getConnectionDruid();
             bookStoreServer.update(connection , sql , 10 );
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            BookStoreUtils.closeResource(connection,null,null);
+            DbUtils.closeQuietly(connection,null,null);
         }
     }
 
 
+    // * 10、从键盘输入用户名，实现查询该用户的订单和订单明细
 
-//     * 10、从键盘输入用户名，实现查询该用户的订单和订单明细
-// *
-//         * 11、使用JDBC实现删除订单“15275760194821”的相关信息，注意涉及到两张表
+
+    // * 11、使用JDBC实现删除订单“15275760194821”的相关信息，注意涉及到两张表
 
 
 

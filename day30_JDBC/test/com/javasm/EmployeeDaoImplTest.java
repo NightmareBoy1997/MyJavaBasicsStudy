@@ -1,6 +1,6 @@
 package com.javasm;
 
-import com.javasm.bean.Employee;
+import org.javasm.supermarket.bean.Employee;
 import com.javasm.demo2.bean.KeyValues;
 import com.javasm.demo2.dao.impl.EmployeeDaoImpl;
 import org.junit.jupiter.api.Test;

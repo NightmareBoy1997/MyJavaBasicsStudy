@@ -1,4 +1,4 @@
-package com.javasm.bean;
+package org.javasm.supermarket.bean;
 
 import lombok.Data;
 import java.math.BigDecimal;

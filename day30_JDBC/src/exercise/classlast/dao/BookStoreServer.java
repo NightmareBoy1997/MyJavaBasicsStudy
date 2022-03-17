@@ -23,9 +23,9 @@ public interface BookStoreServer {
 
     <T> List<T> queryAll();
 
+    <T> T getInstanceFo(String sql);
 
     Integer getValue(String sql);
 
-    <T> T getInstanceFo(String sql);
 
 }

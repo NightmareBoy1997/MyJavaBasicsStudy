@@ -1,9 +1,12 @@
 package exercise.classlast.dao.impl;
 
+import exercise.classlast.bean.Book;
 import exercise.classlast.bean.User;
 import exercise.classlast.dao.BookStoreDao;
 import exercise.classlast.dao.BookStoreServer;
-import exercise.classlast.util.BookStoreUtils;
+import exercise.classlast.util.DruidUtils;
+import org.apache.commons.dbutils.DbUtils;
+import org.apache.commons.dbutils.QueryRunner;
 
 import java.sql.Connection;
 import java.util.List;
@@ -45,15 +48,15 @@ public class UserServerImpl implements BookStoreServer {
                 String email = scanner.next();
                 User user = new User(1,userName,password,email);
 
-                connection = BookStoreUtils.getConnection();
-                bookStoreDao.updateBookStore(connection,sql,user.getUsername(),user.getPassword(),user.getEmail());
+                QueryRunner queryRunner = new QueryRunner(DruidUtils.getDataSource());
+                queryRunner.update(sql,user.getUsername(),user.getPassword(),user.getEmail());
                 System.out.print("是否继续？(y/n): ");
                 str = scanner.next();
             } while (! Objects.equals("n",str));
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            BookStoreUtils.closeResource(connection,null,null);
+            DbUtils.closeQuietly(connection,null,null);
         }
 
     }
@@ -63,15 +66,17 @@ public class UserServerImpl implements BookStoreServer {
 
     }
 
+
+    @Override
+    public <T> T getInstanceFo(String sql) {
+        return null;
+    }
+
     @Override
     public Integer getValue(String sql) {
         return bookStoreDao.getValue(sql);
     }
 
-    @Override
-    public User getInstanceFo(String sql) {
-        return bookStoreDao.getInstanceFo(User.class,sql);
-    }
 
 
     @Override

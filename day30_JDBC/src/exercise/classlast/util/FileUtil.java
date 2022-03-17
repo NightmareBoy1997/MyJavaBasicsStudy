@@ -48,7 +48,7 @@ public class FileUtil {
             ) {
                 bufferedInputStream.transferTo(bufferedOutputStream);
 
-                return childParentDirectory + imgStr;
+                return childParentDirectory + "/" + imgStr;
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -1,6 +1,6 @@
 package com.javasm.demo2.dao;
 
-import com.javasm.bean.Employee;
+import org.javasm.supermarket.bean.Employee;
 import com.javasm.demo2.bean.KeyValues;
 
 import java.util.List;

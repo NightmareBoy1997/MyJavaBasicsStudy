@@ -1,8 +1,13 @@
 package javasm.test;
 
 import comguigu.java.demo.java3.util.JDBCUtils;
+import exercise.classlast.bean.Book;
+import exercise.classlast.util.DruidUtils;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.junit.jupiter.api.Test;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 /**
@@ -30,9 +35,9 @@ public class PreparedStatementTest {
 
         String next = input.nextLine();
 
-
-
     }
+
+
 
 
 }

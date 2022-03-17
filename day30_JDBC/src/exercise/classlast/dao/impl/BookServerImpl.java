@@ -4,8 +4,12 @@ import exercise.classlast.bean.Book;
 import exercise.classlast.dao.BookStoreDao;
 import exercise.classlast.dao.BookStoreServer;
 import exercise.classlast.util.BookStoreUtils;
+import exercise.classlast.util.DruidUtils;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
@@ -49,8 +53,9 @@ public class BookServerImpl implements BookStoreServer {
                 String imgPath = scanner.next();
                 Book book = new Book(1,title,author,price,100,100,imgPath);
 
-                connection = BookStoreUtils.getConnection();
-                bookStoreDao.updateBookStore(connection,sql,book.getTitle(),book.getAuthor(),book.getPrice(),book.getImgPath());
+                connection = DruidUtils.getConnectionDruid();
+                QueryRunner queryRunner = new QueryRunner();
+                queryRunner.update(connection,sql,book.getTitle(),book.getAuthor(),book.getPrice(),book.getImgPath());
                 System.out.print("是否继续？(y/n): ");
                 str = scanner.next();
             } while (! Objects.equals("n",str));
@@ -65,11 +70,7 @@ public class BookServerImpl implements BookStoreServer {
     @Override
     public void update(Connection connection ,String sql, Object... objects) {
         bookStoreDao.update(connection ,sql,  objects);
-    }
-
-    @Override
-    public Integer getValue(String sql) {
-        return bookStoreDao.getValue(sql);
+        System.out.println("修改成功！");
     }
 
     @Override
@@ -78,10 +79,21 @@ public class BookServerImpl implements BookStoreServer {
     }
 
     @Override
-    public  List<Book> queryAll() {
-        String sql = "SELECT id,title,author,price,sales,stock,img_path imgPath FROM books";
+    public Integer getValue(String sql) {
+        return bookStoreDao.getValue(sql);
+    }
 
-        return bookStoreDao.queryAll(Book.class,sql) ;
+
+    @Override
+    public  List<Book> queryAll() {
+        QueryRunner queryRunner = new QueryRunner(DruidUtils.getDataSource());
+        String sql = "SELECT id,title,author,price,sales,stock,img_path imgPath FROM books";
+        try {
+            return queryRunner.query(DruidUtils.getConnectionDruid(),sql,new BeanListHandler<>(Book.class));
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null ;
     }
 
 //    @Override
