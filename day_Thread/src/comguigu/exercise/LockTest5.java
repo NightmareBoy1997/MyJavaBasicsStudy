@@ -40,7 +40,7 @@ public class LockTest5 extends Thread{
     }
 
 
-class Test{
+class Test11{
     public static void main(String[] args) {
         LockTest5 win1 = new LockTest5();
         LockTest5 win2 = new LockTest5();

@@ -37,7 +37,18 @@ public class InputUtil {
     }
 
     /**
-     *  录入字符
+     * 录入int值
+     *
+     * @return
+     */
+    public static int nextInt() {
+        return scanner.nextInt();
+    }
+
+
+    /**
+     * 录入字符
+     *
      * @return
      */
     public static String next() {
@@ -47,7 +58,7 @@ public class InputUtil {
             inputString = scanner.next();
             if (Objects.nonNull(inputString)) {
                 return inputString;
-            }else{
+            } else {
                 System.out.print("不能为空，请重新输入： ");
             }
         } while (true);
@@ -57,6 +68,7 @@ public class InputUtil {
 
     /**
      * 录入符合给定的正则格式字符
+     *
      * @param regex
      * @return
      */
@@ -73,5 +85,11 @@ public class InputUtil {
     }
 
 
+    public static void close() {
+        scanner.close();
+    }
 
+    public static Double nextDouble() {
+        return scanner.nextDouble();
+    }
 }

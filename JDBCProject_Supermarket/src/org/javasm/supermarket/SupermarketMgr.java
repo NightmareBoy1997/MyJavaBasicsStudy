@@ -1,5 +1,6 @@
 package org.javasm.supermarket;
 
+import org.javasm.supermarket.menu.ProductMenu;
 import org.javasm.supermarket.menu.TypeMenu;
 import org.javasm.supermarket.util.InputUtil;
 import org.javasm.supermarket.util.RoleEnum;
@@ -39,51 +40,72 @@ public class SupermarketMgr {
         }else{
             throw new RuntimeException("账户或密码错误！登录失败！");
         }
+        InputUtil.close();
     }
 
 
     private void adminMenu(){
         System.out.println("\n欢迎你 " + RoleEnum.ADMIN.getName() );
-        String inputString ;
+        boolean flag =true ;
         do {
-            System.out.println("********************** 管理界面 **********************");
-            System.out.println("1.类型管理");
-            System.out.println("2.商品管理");
-            System.out.println("3.会员管理");
-            System.out.println("4.退    出");
+            System.out.println("****************** >> 管理主界面 << ******************");
+            System.out.println("1. 类型管理 ");
+            System.out.println("2. 商品管理  ");
+            System.out.println("3. 会员管理 ");
+            System.out.println("4. 退    出");
 
-            System.out.print("\n请选择要进行的操作: ");
+            System.out.print("请选择要进行的操作(1-4): ");
             final int inputNumber = InputUtil.nextInt("^[1-4]$");
             switch(inputNumber){
                 case 1:
+//                    System.out.println("---> 类型管理\n");
                     new TypeMenu().menu();
                     break;
                 case 2:
+
+                    new ProductMenu().menu();
                     break;
                 case 3 :
 
                     break;
                 case 4:
-                    System.out.print("是否继续操作？y/n: ");
-                    return;
+                    flag = isBreakApp();
+                    break;
                 default :
                     break;
             }
-            System.out.print("是否继续操作？y/n: ");
-            inputString = InputUtil.next("^[Y|N|y|n]$");
-        } while (!"n".equalsIgnoreCase(inputString));
+        } while (flag);
 
     }
 
     /**
-     *
+     * 收银员管理界面
      */
     private void cashierMenu(){
         System.out.println("\n欢迎你 " + RoleEnum.CASHIER.getName() );
         System.out.println("********************** 管理界面 **********************");
 
+        System.out.println("\n欢迎你 " + RoleEnum.CASHIER.getName() );
+        System.out.println("********************** 管理界面 **********************");
+        System.out.println("1. 购物车管理");
+        System.out.println("2. 购物车管理");
+        System.out.println("3. 购物车管理");
+        System.out.println("4. 购物车管理");
+
+
+        int choice = InputUtil.nextInt("^[1-4]$");
+
+
     }
 
+
+    /**
+     * 测试
+     * @param args
+     */
+    public static void main(String[] args) {
+        new SupermarketMgr().adminMenu();
+    }
 
 
 
@@ -93,11 +115,11 @@ public class SupermarketMgr {
      * @return
      */
     private boolean isBreakApp() {
+        System.out.print("是否确认退出？y/n: ");
         final String inputString = InputUtil.next("^[Y|N|y|n]$");
         if("y".equalsIgnoreCase(inputString)){
             return false;
         }
         return true;
     }
-
 }

@@ -14,8 +14,8 @@ import lombok.Getter;
 @Getter
 public enum  RoleEnum {
 
-    ADMIN("admin","12345") ,
-    CASHIER("cashier","12345");
+    ADMIN("admin","1234") ,
+    CASHIER("cashier","1234");
 
     private String name ;
     private String password ;

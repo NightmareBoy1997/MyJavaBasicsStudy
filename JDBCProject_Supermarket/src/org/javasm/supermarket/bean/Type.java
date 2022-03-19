@@ -7,13 +7,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Commodity {
+public class Type {
 
   private Integer id;
   private Integer prentId;
   private String typeName;
-  private Integer prent;
-  private Integer typeStatus;
+  private boolean prent;
+  private boolean typeStatus;
   private java.util.Date createTime;
   private java.util.Date updateTime;
 
