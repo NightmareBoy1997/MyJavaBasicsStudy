@@ -26,7 +26,7 @@ public class ProductDaoImpl implements ProductDao {
     private static final QueryRunner queryRunner = new QueryRunner();
 
     @Override
-    public List<Product> findProductByTypeId(Connection connection, int typeId) throws SQLException {
+    public List<Product> findByTypeId(Connection connection, int typeId) throws SQLException {
         return queryRunner.query(connection, ProductSql.FIND_ALL_PRODUCT_BY_TYPE, new BeanListHandler<>(Product.class), typeId);
     }
 
@@ -34,24 +34,38 @@ public class ProductDaoImpl implements ProductDao {
     @Override
     public void addAndDelete(Connection connection, Product product) throws SQLException {
         final Integer productId = product.getId();
-        if (productId==null) {
-            queryRunner.update(connection, ProductSql.INSERT_INTO_PRODUCT,product.getProductName(),product.getTypeId(),product.getProductPrice());
+        if (productId == null) {
+            queryRunner.update(connection, ProductSql.INSERT_INTO_PRODUCT, product.getProductName(), product.getTypeId(), product.getProductPrice());
             return;
         }
-        queryRunner.update(connection,ProductSql.DELETE_PRODUCT_BY_ID,productId);
+        queryRunner.update(connection, ProductSql.DELETE_PRODUCT_BY_ID, productId);
     }
 
 
     @Override
-    public  List<Product> findAllProduct(Connection connection) throws SQLException {
-        return queryRunner.query(connection,ProductSql.SELECT_ALL_PRODUCT, new BeanListHandler<>(Product.class));
+    public List<Product> findAll(Connection connection) throws SQLException {
+        return queryRunner.query(connection, ProductSql.SELECT_ALL_PRODUCT, new BeanListHandler<>(Product.class));
+    }
+
+
+    @Override
+    public void update(Connection connection, Product product) throws SQLException {
+        queryRunner.update(connection, ProductSql.UPDATE_PRODUCT,
+                product.getProductName(),
+                product.getTypeId(),
+                product.getProductPrice(),
+                product.getProductStore(),
+                product.getProductImage(),
+                product.isProductStatus(),
+                product.getProductDiscount(),
+                product.getId()
+        );
     }
 
 
     private Product findProductById(Connection connection, int productId) throws SQLException {
         return queryRunner.query(connection, ProductSql.FIND_PRODUCT_BY_ID, new BeanHandler<>(Product.class), productId);
     }
-
 
 
     @Test

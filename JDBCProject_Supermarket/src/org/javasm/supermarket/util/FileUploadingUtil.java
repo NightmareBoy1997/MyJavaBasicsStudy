@@ -14,15 +14,17 @@ import java.util.UUID;
  * @create: 2022-03-18 22:55
  */
 public class FileUploadingUtil {
+    private FileUploadingUtil(){
+    }
+
     final static String PRENT_DIRECTORY = "JDBCProject_Supermarket/src/upload/image/";
 
-
-    public String uploadImage(String sourcePath) {
+    public static String uploadImage(String sourcePath) {
         File curDirectory = new File(PRENT_DIRECTORY + LocalDate.now().toString());
         if (!curDirectory.exists()) {
             curDirectory.mkdirs();
         }
-        String imageType = sourcePath.substring(sourcePath.lastIndexOf(".") + 1);
+        String imageType = sourcePath.substring(sourcePath.lastIndexOf(".") );
         String imageName = UUID.randomUUID().toString().replaceAll("-", "") + imageType;
 
         try (BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(sourcePath));

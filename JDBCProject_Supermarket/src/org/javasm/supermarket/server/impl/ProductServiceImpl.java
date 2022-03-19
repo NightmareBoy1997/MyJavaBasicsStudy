@@ -32,18 +32,13 @@ public class ProductServiceImpl implements ProductService {
         try {
             productDao.addAndDelete(connection , product);
             // 更新缓存
-            allProductList = productDao.findAllProduct(connection);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            allProductList = productDao.findAll(connection);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }finally{
             DbUtils.closeQuietly(connection);
         }
     }
-
-public void updateProductFunction(){
-    // 更新缓存
-//    allProductList = productDao.findAllProduct(connection);
-}
 
 
     @Override
@@ -60,13 +55,13 @@ public void updateProductFunction(){
         for (Product p : allProductList) {
             String status ;
             String discount ;
-            final Integer productDiscount = p.getProductDiscount();
+            final Double productDiscount = p.getProductDiscount();
             if (p.isProductStatus()) {
                 status = "在售";
             }else{
                 status = "下架";
             }
-            if (productDiscount.equals(10)) {
+            if (productDiscount.equals(10.0)) {
                 discount = "未打折";
             }else{
                 discount = productDiscount + "折";
@@ -81,9 +76,24 @@ public void updateProductFunction(){
 
     @Override
     public void updateProduct(Product product) {
+        Connection connection = DruidUtil.getConnection();
+        try {
+            productDao.update(connection,product);
 
-
-
+            // 更新缓存
+            allProductList = productDao.findAll(connection);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally{
+            DbUtils.closeQuietly(connection);
+        }
     }
+
+
+    public List<Product> getAllProductCache(){
+        return allProductList;
+    }
+
+
 
 }

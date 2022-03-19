@@ -16,16 +16,21 @@ public interface ProductSql {
             "create_time createTime , update_time updateTime FROM product WHERE type_id = ?";
 
 
-    String INSERT_INTO_PRODUCT = "INSERT INTO product ( product_name, type_id, product_price,  product_discount ," +
-            " create_time, update_time)  VALUES( ?,?,?,10,now(),now() )" ;
+    String INSERT_INTO_PRODUCT = "INSERT INTO product ( product_name, type_id, product_price, product_store , " +
+            "product_status , product_discount ,create_time , update_time  )  VALUES( ?,?,?,100,1,10,now(),now() )" ;
 
 
     String FIND_PRODUCT_BY_ID =  "SELECT id,product_name productName , type_id typeId , product_price productPrice ," +
             "product_store productStore , product_image productImage , product_status productStatus,product_discount productDiscount," +
             "create_time createTime , update_time updateTime FROM product WHERE id = ?";
+
     String DELETE_PRODUCT_BY_ID = "DELETE FROM product WHERE id = ?";
 
     String SELECT_ALL_PRODUCT =  "SELECT id,product_name productName , type_id typeId , product_price productPrice ," +
             "product_store productStore , product_image productImage , product_status productStatus,product_discount productDiscount," +
             "create_time createTime , update_time updateTime FROM product ";
+
+    String UPDATE_PRODUCT = "UPDATE product SET product_name = ? , type_id = ? , product_price = ? , product_store = ? ," +
+            " product_image = ?, product_status = ?,product_discount = ?, update_time = now()  WHERE id = ?" ;
+
 }

@@ -2,6 +2,8 @@ package org.javasm.supermarket.server;
 
 import org.javasm.supermarket.bean.Product;
 
+import java.util.List;
+
 /**
  * @projectName: MyJavaStudy
  * @package: org.javasm.supermarket.server
@@ -19,5 +21,6 @@ public interface ProductService {
 
     void updateProduct(Product product);
 
+    List<Product> getAllProductCache();
 
 }

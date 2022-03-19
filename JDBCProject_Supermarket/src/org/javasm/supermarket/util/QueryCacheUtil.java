@@ -70,7 +70,7 @@ public abstract class QueryCacheUtil {
                     list = (List<T>) typeDao.findAllType(connection);
                     break;
                 case "Product":
-                    list = (List<T>) productDao.findAllProduct(connection);
+                    list = (List<T>) productDao.findAll(connection);
                     break;
                 default:
                     throw new RuntimeException("不存在此类型数据缓存!");

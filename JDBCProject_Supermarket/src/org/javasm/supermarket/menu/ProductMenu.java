@@ -1,6 +1,7 @@
 package org.javasm.supermarket.menu;
 
 import org.javasm.supermarket.bean.Product;
+import org.javasm.supermarket.common.ProductUpdateFunction;
 import org.javasm.supermarket.server.ProductService;
 import org.javasm.supermarket.server.TypeService;
 import org.javasm.supermarket.server.impl.ProductServiceImpl;
@@ -70,7 +71,6 @@ public class ProductMenu {
 
                 System.out.print("是否继续进行商品管理？y/n: ");
                 isGo = InputUtil.next("^[y|n|Y|N]$");
-                System.out.println();
             } while ("y".equalsIgnoreCase(isGo));
 
         } finally {
@@ -85,53 +85,64 @@ public class ProductMenu {
         String isGo ;
 
         do {
-            System.out.println("请输入要修改的商品id");
+            System.out.print("请输入要修改的商品id: ");
             int id = InputUtil.nextInt();
 
             Product product = getProduceById(id);
-            if(product==null){
+            if (product == null) {
                 System.out.println("不存在此id的商品，操作失败！");
+                System.out.println("---> << 商品管理 >>");
                 return;
             }
 
+            ProductUpdateFunction updateFunction = new ProductUpdateFunction();
+            boolean execute = true;
+
             System.out.println("\n1. 修改名称");
-            System.out.println("\n2. 修改类别");
-            System.out.println("\n3. 修改价格");
-            System.out.println("\n4. 修改库存");
-            System.out.println("\n5. 更新附图");
-            System.out.println("\n6. 更改状态");
-            System.out.println("\n7. 促销管理");
+            System.out.println("2. 修改类别");
+            System.out.println("3. 修改价格");
+            System.out.println("4. 修改库存");
+            System.out.println("5. 更新附图");
+            System.out.println("6. 更改状态");
+            System.out.println("7. 促销管理");
             System.out.print("请选择要修改的信息(1-7): ");
             final int nextInt = InputUtil.nextInt("^[1-7]$");
 
-            switch(nextInt){
+            switch (nextInt) {
                 case 1:
+                    execute = updateFunction.updateName(product);
                     break;
                 case 2:
+                    execute = updateFunction.updateType(product);
                     break;
                 case 3:
+                    updateFunction.updatePrice(product);
                     break;
                 case 4:
+                    updateFunction.updateStore(product);
                     break;
                 case 5:
+                    updateFunction.updateImage(product);
                     break;
                 case 6:
+                    execute = updateFunction.updateStatus(product);
                     break;
                 case 7:
+                    execute = updateFunction.updateDiscount(product);
                     break;
-                default :
+                default:
                     break;
             }
 
+            if (execute) {
+                productService.updateProduct(product);
+                System.out.println("修改商品 << " + product.getProductName() + " >> 成功！");
+            }
 
-            productService.updateProduct(product);
-            System.out.println("修改商品 << " + product.getProductName() + " >> 成功！");
             System.out.print("是否继续进行修改操作？y/n： ");
             isGo = InputUtil.next("^[y|n|Y|N]$");
-        } while (true);
-
+        } while ("y".equalsIgnoreCase(isGo));
     }
-
 
     private void deleteProductFunction() {
         showAllProductFunction();
@@ -139,7 +150,7 @@ public class ProductMenu {
         int id = InputUtil.nextInt();
 
         Product product = getProduceById(id);
-        if(product==null){
+        if (product == null) {
             System.out.println("不存在此id的商品，操作失败！");
             return;
         }
@@ -167,6 +178,7 @@ public class ProductMenu {
         String productName = InputUtil.next();
         System.out.print("请输入商品所属的类型id： ");
         Integer typeId = InputUtil.nextInt();
+
         System.out.print("请输入要商品的价格： ");
         Double productPrice = InputUtil.nextDouble();
 
@@ -176,6 +188,7 @@ public class ProductMenu {
         product.setProductPrice(productPrice);
 
         productService.addAndDeleteProductFunction(product);
+        System.out.println("添加 << "+ productName + " >>");
     }
 
 
@@ -185,9 +198,8 @@ public class ProductMenu {
     }
 
 
-
-    private Product getProduceById(int productId){
-        final List<Product> productList = QueryCacheUtil.getAllCacheList(Product.class);
+    private Product getProduceById(int productId) {
+        final List<Product> productList = productService.getAllProductCache();
         final List<Product> idList = productList.stream().filter(p -> p.getId().equals(productId)).collect(Collectors.toList());
         if (idList.isEmpty()) {
             return null;

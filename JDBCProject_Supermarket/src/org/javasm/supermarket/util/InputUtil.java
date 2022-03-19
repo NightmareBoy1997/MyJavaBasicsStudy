@@ -92,4 +92,8 @@ public class InputUtil {
     public static Double nextDouble() {
         return scanner.nextDouble();
     }
+
+    public static String nextLine() {
+        return scanner.nextLine();
+    }
 }

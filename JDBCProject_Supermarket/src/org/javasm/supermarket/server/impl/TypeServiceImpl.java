@@ -157,7 +157,7 @@ public class TypeServiceImpl implements TypeService {
         try {
             // 删除子级类型： 1.没有商品关联 可以删除  2. 有商品关联 无法删除
             // 查询是否有商品使用此类型
-            List<Product> productList = productDao.findProductByTypeId(connection, typeId);
+            List<Product> productList = productDao.findByTypeId(connection, typeId);
             if (!productList.isEmpty()) {
                 System.out.println("<<" + typeName + ">> 关联了具体商品，无法删除！");
                 return false;
@@ -219,9 +219,9 @@ public class TypeServiceImpl implements TypeService {
      * @throws SQLException
      */
     public void setOldPrentType(Connection connection, int oldPrentId) throws SQLException {
-        List<Type> oldPrentList = allTypeList.stream().filter(t -> t.getPrentId().equals(oldPrentId)).collect(Collectors.toList());
+        long childTypeNumber = allTypeList.stream().filter(t -> t.getPrentId().equals(oldPrentId)).count() ;
         // 查看旧父级类型是否存在其他子级类型，如果没有修改prent值
-        if (oldPrentList.size() <= 1) {
+        if (childTypeNumber <= 1) {
             Type oldPrentIdType = typeDao.findTypeById(connection, oldPrentId);
             oldPrentIdType.setPrent(false);
             typeDao.updateTypeById(connection, oldPrentIdType);

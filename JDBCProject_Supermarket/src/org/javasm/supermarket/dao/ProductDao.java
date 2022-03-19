@@ -18,12 +18,14 @@ import java.util.List;
 public interface ProductDao {
 
 
-    List<Product> findProductByTypeId(Connection connection , int typeId) throws SQLException;
+    List<Product> findByTypeId(Connection connection , int typeId) throws SQLException;
 
 
     void addAndDelete(Connection connection, Product product) throws SQLException;
 
-    List<Product> findAllProduct(Connection connection) throws SQLException;
+    List<Product> findAll(Connection connection) throws SQLException;
 
+
+    void update(Connection connection , Product product) throws SQLException;
 
 }
