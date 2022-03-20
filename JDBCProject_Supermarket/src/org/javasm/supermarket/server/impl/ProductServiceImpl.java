@@ -6,7 +6,7 @@ import org.javasm.supermarket.dao.ProductDao;
 import org.javasm.supermarket.dao.impl.ProductDaoImpl;
 import org.javasm.supermarket.server.ProductService;
 import org.javasm.supermarket.util.DruidUtil;
-import org.javasm.supermarket.util.QueryCacheUtil;
+import org.javasm.supermarket.util.CacheUtil;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -23,11 +23,11 @@ import java.util.List;
  */
 public class ProductServiceImpl implements ProductService {
     private static final ProductDao productDao = new ProductDaoImpl();
-    private static List<Product> allProductList= QueryCacheUtil.getAllCacheList(Product.class);
+    private static List<Product> allProductList= CacheUtil.getAllCacheList(Product.class);
 
 
     @Override
-    public void addAndDeleteProductFunction(Product product) {
+    public void addAndDeleteProduct(Product product) {
         Connection connection = DruidUtil.getConnection();
         try {
             productDao.addAndDelete(connection , product);

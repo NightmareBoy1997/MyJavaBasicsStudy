@@ -7,7 +7,7 @@ import org.javasm.supermarket.server.TypeService;
 import org.javasm.supermarket.server.impl.ProductServiceImpl;
 import org.javasm.supermarket.server.impl.TypeServiceImpl;
 import org.javasm.supermarket.util.InputUtil;
-import org.javasm.supermarket.util.QueryCacheUtil;
+import org.javasm.supermarket.util.CacheUtil;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -75,7 +75,7 @@ public class ProductMenu {
 
         } finally {
             // 更新缓存库
-            QueryCacheUtil.updateCache(Product.class);
+            CacheUtil.updateCache(Product.class);
         }
     }
 
@@ -155,7 +155,7 @@ public class ProductMenu {
             return;
         }
 
-        productService.addAndDeleteProductFunction(product);
+        productService.addAndDeleteProduct(product);
         System.out.println("删除商品 << " + product.getProductName() + " >> 成功！");
     }
 
@@ -187,7 +187,7 @@ public class ProductMenu {
         product.setTypeId(typeId);
         product.setProductPrice(productPrice);
 
-        productService.addAndDeleteProductFunction(product);
+        productService.addAndDeleteProduct(product);
         System.out.println("添加 << "+ productName + " >>");
     }
 

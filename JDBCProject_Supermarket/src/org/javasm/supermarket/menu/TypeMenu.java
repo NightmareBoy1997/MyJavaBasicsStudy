@@ -4,7 +4,7 @@ import org.javasm.supermarket.bean.Type;
 import org.javasm.supermarket.server.TypeService;
 import org.javasm.supermarket.server.impl.TypeServiceImpl;
 import org.javasm.supermarket.util.InputUtil;
-import org.javasm.supermarket.util.QueryCacheUtil;
+import org.javasm.supermarket.util.CacheUtil;
 
 /**
  * @projectName: MyJavaStudy
@@ -64,7 +64,7 @@ public class TypeMenu {
             } while ("y".equalsIgnoreCase(isGo));
         } finally {
             // 更新缓存库
-            QueryCacheUtil.updateCache(Type.class);
+            CacheUtil.updateCache(Type.class);
         }
     }
 
@@ -80,7 +80,7 @@ public class TypeMenu {
             System.out.println("删除类型id <<" + typeId + ">> 成功");
         }
         // 更新缓存库
-        QueryCacheUtil.updateCache(Type.class);
+        CacheUtil.updateCache(Type.class);
     }
 
     /**

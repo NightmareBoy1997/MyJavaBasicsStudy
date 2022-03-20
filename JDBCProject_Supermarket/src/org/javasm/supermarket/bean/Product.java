@@ -7,7 +7,7 @@ public class Product {
   private Integer id;
   private String productName;
   private Integer typeId;
-  private double productPrice;
+  private Double productPrice;
   private Integer productStore;
   private String productImage;
   private boolean productStatus;

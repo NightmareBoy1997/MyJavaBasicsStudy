@@ -9,7 +9,7 @@ import org.javasm.supermarket.dao.impl.ProductDaoImpl;
 import org.javasm.supermarket.dao.impl.TypeDaoImpl;
 import org.javasm.supermarket.server.TypeService;
 import org.javasm.supermarket.util.DruidUtil;
-import org.javasm.supermarket.util.QueryCacheUtil;
+import org.javasm.supermarket.util.CacheUtil;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -31,7 +31,7 @@ public class TypeServiceImpl implements TypeService {
     private static final ProductDao productDao = new ProductDaoImpl();
 
     // 获取全部的商品类型缓存集
-    private static List<Type> allTypeList = QueryCacheUtil.getAllCacheList(Type.class);
+    private static List<Type> allTypeList = CacheUtil.getAllCacheList(Type.class);
 
     @Override
     public void findAllType() {

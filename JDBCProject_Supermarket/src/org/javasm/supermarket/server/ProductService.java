@@ -15,7 +15,7 @@ import java.util.List;
  */
 public interface ProductService {
 
-    void addAndDeleteProductFunction(Product product);
+    void addAndDeleteProduct(Product product);
 
     void showAllProduct();
 

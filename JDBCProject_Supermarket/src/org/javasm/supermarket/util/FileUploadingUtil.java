@@ -20,6 +20,10 @@ public class FileUploadingUtil {
     final static String PRENT_DIRECTORY = "JDBCProject_Supermarket/src/upload/image/";
 
     public static String uploadImage(String sourcePath) {
+        if(! new File(sourcePath).exists()){
+            return null;
+        }
+
         File curDirectory = new File(PRENT_DIRECTORY + LocalDate.now().toString());
         if (!curDirectory.exists()) {
             curDirectory.mkdirs();

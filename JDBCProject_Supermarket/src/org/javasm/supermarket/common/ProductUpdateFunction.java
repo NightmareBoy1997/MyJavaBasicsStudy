@@ -5,7 +5,7 @@ import org.javasm.supermarket.bean.Type;
 import org.javasm.supermarket.server.impl.TypeServiceImpl;
 import org.javasm.supermarket.util.FileUploadingUtil;
 import org.javasm.supermarket.util.InputUtil;
-import org.javasm.supermarket.util.QueryCacheUtil;
+import org.javasm.supermarket.util.CacheUtil;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -46,7 +46,7 @@ public class ProductUpdateFunction {
         System.out.print("请输入要关联的类型id: ");
         int typeId = InputUtil.nextInt();
 
-        final List<Type> allType = QueryCacheUtil.getAllCacheList(Type.class);
+        final List<Type> allType = CacheUtil.getAllCacheList(Type.class);
         if (allType.stream().filter(t -> t.getId().equals(typeId)).count() == 0) {
             System.out.println("要关联的类型不存在，修改失败！");
             return false;

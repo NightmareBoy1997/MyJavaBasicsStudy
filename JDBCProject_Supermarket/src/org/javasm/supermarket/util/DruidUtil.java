@@ -53,6 +53,9 @@ public class DruidUtil {
     }
 
 
+    public static DruidDataSource getDataSource(){
+        return druidDataSource;
+    }
 
 
 }
