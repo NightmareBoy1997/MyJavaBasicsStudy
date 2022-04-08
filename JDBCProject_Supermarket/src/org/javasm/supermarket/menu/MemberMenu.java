@@ -84,7 +84,7 @@ public class MemberMenu {
     private void rechargeAmount() {
         System.out.print("请输入要充值的会员id： ");
         int memberId = InputUtil.nextInt();
-        final List<Member> allMember = memberService.findAllMember().stream().filter(m->m.getId().equals(memberId)).collect(Collectors.toList());
+        final List<Member> allMember = memberService.findAllMember().stream().filter(m->m.getMemberId().equals(memberId)).collect(Collectors.toList());
         if(allMember.isEmpty()){
             System.out.println("不存在此会员！");
             return;
@@ -126,7 +126,7 @@ public class MemberMenu {
                 case 1:
                     System.out.println("请输入要操作的会员id: ");
                     int id = InputUtil.nextInt();
-                    final List<Member> idMember = allMember.stream().filter(m -> m.getId().equals(id)).collect(Collectors.toList());
+                    final List<Member> idMember = allMember.stream().filter(m -> m.getMemberId().equals(id)).collect(Collectors.toList());
                     if (idMember.isEmpty()) {
                         System.out.println("输入的会员id不存在! ");
                         break;

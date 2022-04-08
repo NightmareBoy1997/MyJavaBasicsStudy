@@ -25,8 +25,8 @@ public class MemberDaoImpl implements MemberDao {
 
     @Override
     public void addAndDelete(Member member) throws SQLException {
-        if (Objects.nonNull(member.getId())) {
-            queryRunner.update(MemberSql.DELETE_MEMBER_BY_ID, member.getId());
+        if (Objects.nonNull(member.getMemberId())) {
+            queryRunner.update(MemberSql.DELETE_MEMBER_BY_ID, member.getMemberId());
             return;
         }
         queryRunner.update(MemberSql.INSERT_MEMBER, member.getName(), member.getPassword());
@@ -45,7 +45,7 @@ public class MemberDaoImpl implements MemberDao {
 
     @Override
     public void update(Member member) throws SQLException {
-        queryRunner.update(MemberSql.UPDATE_MEMBER_BY_ID, member.getPassword(), member.getUserImage(), member.getPhone(), member.getBalance(),member.getId());
+        queryRunner.update(MemberSql.UPDATE_MEMBER_BY_ID, member.getPassword(), member.getUserImage(), member.getPhone(), member.getBalance(),member.getMemberId());
     }
 
 

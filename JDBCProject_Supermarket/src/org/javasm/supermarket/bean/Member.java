@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 @Data
 public class Member {
 
-    private Integer id;
+    private Integer memberId;
     private String name;
     private String password;
     private String userImage;

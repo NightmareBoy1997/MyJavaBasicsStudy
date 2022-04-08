@@ -1,5 +1,6 @@
 package org.javasm.supermarket.common;
 
+import lombok.Data;
 import org.javasm.supermarket.bean.Product;
 
 import java.math.BigDecimal;
@@ -13,6 +14,7 @@ import java.math.BigDecimal;
  * @version: JDK11
  * @create: 2022-03-20 17:24
  */
+@Data
 public class CartItem {
     private Product product ;
     private Integer buyNumber ;

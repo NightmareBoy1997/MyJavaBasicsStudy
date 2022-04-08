@@ -63,7 +63,8 @@ public class ProductDaoImpl implements ProductDao {
     }
 
 
-    private Product findProductById(Connection connection, int productId) throws SQLException {
+    @Override
+    public Product findProductById(Connection connection, int productId) throws SQLException {
         return queryRunner.query(connection, ProductSql.FIND_PRODUCT_BY_ID, new BeanHandler<>(Product.class), productId);
     }
 

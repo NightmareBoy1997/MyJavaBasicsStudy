@@ -1,5 +1,6 @@
 package org.javasm.supermarket;
 
+import org.javasm.supermarket.common.OrderDetailMenu;
 import org.javasm.supermarket.common.RoleEnum;
 import org.javasm.supermarket.menu.CartMenu;
 import org.javasm.supermarket.menu.MemberMenu;
@@ -86,7 +87,6 @@ public class SupermarketMgr {
      */
     private void cashierMenu() {
         System.out.println("\n欢迎你 " + RoleEnum.CASHIER.getName());
-        boolean flag = true;
         do {
             System.out.println("\n********************** 收银管理系统 **********************");
             System.out.println("1. 购物车管理");
@@ -101,17 +101,17 @@ public class SupermarketMgr {
                     new CartMenu().menu();
                     break;
                 case 2:
-
+                    new OrderDetailMenu().findOrderDetailByMemberId();
                     break;
                 case 3:
-
+                    new OrderDetailMenu().orderDetailSort();
                     break;
                 case 4:
-                    flag = lskjkl();
+                    return;
                 default:
                     break;
             }
-        } while (flag);
+        } while (true);
     }
 
 
@@ -121,7 +121,7 @@ public class SupermarketMgr {
      * @param args
      */
     public static void main(String[] args) {
-        new SupermarketMgr().adminMenu();
+        new SupermarketMgr().cashierMenu();
     }
 
 

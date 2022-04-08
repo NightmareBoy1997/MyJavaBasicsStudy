@@ -25,4 +25,5 @@ public interface MemberDao {
 
     void update(Member member) throws SQLException;
 
+//    List<Member> findMemberByNameAndPassword(String user,String password) throws SQLException;
 }

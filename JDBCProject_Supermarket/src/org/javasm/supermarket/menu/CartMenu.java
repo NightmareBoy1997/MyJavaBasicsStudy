@@ -1,14 +1,19 @@
 package org.javasm.supermarket.menu;
 
-import org.javasm.supermarket.common.CartItem;
+import org.javasm.supermarket.bean.Member;
 import org.javasm.supermarket.bean.Product;
+import org.javasm.supermarket.common.CartItem;
 import org.javasm.supermarket.common.CartService;
-import org.javasm.supermarket.common.RoleEnum;
+import org.javasm.supermarket.server.MemberService;
+import org.javasm.supermarket.server.OrderService;
 import org.javasm.supermarket.server.ProductService;
+import org.javasm.supermarket.server.impl.MemberServiceImpl;
+import org.javasm.supermarket.server.impl.OrderServiceImpl;
 import org.javasm.supermarket.server.impl.ProductServiceImpl;
 import org.javasm.supermarket.util.InputUtil;
 import org.javasm.supermarket.util.LimitUtil;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,12 +28,10 @@ import java.util.stream.Collectors;
  */
 public class CartMenu {
     private static ProductService productService = new ProductServiceImpl();
+    private Member member;
 
 
     public void menu() {
-
-        System.out.println("\n欢迎你 " + RoleEnum.CASHIER.getName());
-        boolean flag = true;
         do {
             System.out.println("********************** 购买商品管理 **********************");
             System.out.println("1. 添加商品");
@@ -45,30 +48,159 @@ public class CartMenu {
                     buyProductFunction();
                     break;
                 case 2:
-                    new ProductMenu().menu();
+                    setProductBuyNumberFunction();
                     break;
                 case 3:
-                    new MemberMenu().menu();
+                    deleteProductBuyFunction();
                     break;
                 case 4:
-                    flag = isBreakApp();
+                    findAllCartItemFunction();
                     break;
                 case 5:
-                    flag = isBreakApp();
+                    pay();
                     break;
                 case 6:
-                    flag = isBreakApp();
-                    break;
+                    return;
                 default:
                     break;
             }
-        } while (flag);
-
+        } while (true);
 
     }
 
+    private void pay() {
+        OrderService orderService = new OrderServiceImpl();
+        findAllCartItemFunction();
+        BigDecimal totalMoney = CartService.getTotalMoney();
+        System.out.println("一共需要支付： " + totalMoney);
+
+        System.out.println("请选择支付方式： ");
+        System.out.println("1. 现金支付");
+        System.out.println("2. 余额支付");
+        System.out.println();
+        int payType = InputUtil.nextInt("^[1-2]$");
+
+        switch(payType){
+            case 1:
+                member = new Member();
+                member.setMemberId(-1);
+                break;
+            case 2:
+               payType =  balancePay(totalMoney);
+        }
+        // 新增订单
+        orderService.addOrder(member,totalMoney,payType);
+
+        // 清空购物车
+        CartService.cart.clear();
+    }
+
+    private int balancePay(BigDecimal totalMoney) {
+        do {
+            System.out.print("请输入账户： ");
+            String user = InputUtil.next();
+            System.out.print("请输入密码： ");
+            String password = InputUtil.next();
+
+            member = memberService.findMemberByNameAndPassword(user,password);
+            if(member==null){
+                System.out.println("账号不存在！请重新输入");
+                continue;
+            }
+            break;
+        } while (true);
+        final BigDecimal balance = member.getBalance();
+        if(balance.compareTo(totalMoney) < 0){
+            System.out.println("余额不足！请使用现金支付");
+            return 1;
+        }
+        return 2;
+    }
+
+    private static MemberService memberService = new MemberServiceImpl();
+
+    private void deleteProductBuyFunction() {
+        findAllCartItemFunction();
+
+        System.out.print("请输入要删除的购物项id： ");
+        int id = InputUtil.nextInt();
+        if(CartService.getCartItemById(id)==null){
+            System.out.println("不存在此购物项！");
+            return ;
+        }
+        String productName = CartService.getCartItemById(id).getProduct().getProductName();
+        CartService.deleteCartItem(id);
+        System.out.println("删除购买 << " + productName + " >> 完成");
+    }
+
+
+    private void findAllCartItemFunction() {
+        System.out.println("当前购物车清单如下: ");
+        CartService.selectAllCartItem();
+    }
+
+
+    private void setProductBuyNumberFunction() {
+        findAllCartItemFunction();
+        String isGo;
+        do {
+            System.out.print("请选择要修改的购物项id： ");
+            int id = InputUtil.nextInt();
+            if (CartService.getCartItemById(id)==null) {
+                System.out.println("不存在此购物项！");
+                return;
+            }
+            final CartItem cartItem = CartService.getCartItemById(id);
+            Product product = cartItem.getProduct();
+            int execute = 0;
+
+            flag:
+            do {
+                System.out.println("1. 添加1");
+                System.out.println("2. 减少2");
+                System.out.println("3. 删除商品");
+                System.out.println("4. 结束修改此商品");
+                System.out.println("请选择要修改的操作(1-4)： ");
+
+                int number = InputUtil.nextInt("^[1-4]$");
+                switch (number) {
+                    case 1:
+                        if (product.getProductStore().equals(cartItem.getBuyNumber())) {
+                            System.out.println("已经添加全部，无法继续添加！");
+                            break;
+                        }
+                        cartItem.setBuyNumber(cartItem.getBuyNumber() + 1);
+                        execute += 1;
+                        break;
+                    case 2:
+                        if (!cartItem.getBuyNumber().equals(0)) {
+                            System.out.println("已经减去全部数量，购物项删除！");
+                            CartService.deleteCartItem(id);
+                            break flag;
+                        }
+                        cartItem.setBuyNumber(cartItem.getBuyNumber() - 1);
+                        execute += 1;
+                        break;
+                    case 3:
+                        CartService.deleteCartItem(id);
+                        execute += 1;
+                    case 4:
+                        break flag;
+                }
+            } while (true);
+
+            if (execute > 0) {
+                System.out.println("修改购物商品 << " + product + " >> 完成!");
+            }
+
+            System.out.print("是否继续进行购物项修改？(y/n): ");
+            isGo = InputUtil.next("^[y|Y|n|N]$");
+        } while ("y".equalsIgnoreCase(isGo));
+    }
+
+
     private void buyProductFunction() {
-        System.out.println("在售的商品如下： ");
+//        System.out.println("在售的商品如下： ");
         final List<Product> allProductCache = productService.getAllProductCache();
         int total = LimitUtil.getTotal(allProductCache, 3);
         int page = 1;
@@ -79,7 +211,6 @@ public class CartMenu {
             switch (choice) {
                 case 1:
                     buyProduct(allProductCache);
-
                     break;
                 case 2:
                     break;
@@ -110,11 +241,20 @@ public class CartMenu {
         System.out.println("请输入要购买 << " + product.getProductName() + " >> 的数量：");
         final Integer store = product.getProductStore();
         int buyNumber = InputUtil.nextInt();
-        CartItem cartItem = CartService.getProductById(pid);
+        CartItem cartItem = CartService.getCartItemById(pid);
 
-        if(store<buyNumber){
+        if (cartItem == null && buyNumber < store) {
+            cartItem = new CartItem(product, store);
+        } else if (cartItem != null && cartItem.getBuyNumber() + buyNumber < store) {
+            cartItem.setBuyNumber(cartItem.getBuyNumber() + buyNumber);
+        } else {
             System.out.println("超过库存，无法添加！");
+            return;
         }
+
+        // 购买数量可行
+        CartService.addCart(cartItem);
+        System.out.println("添加 << " + product + " >> " + buyNumber + " 完成");
     }
 
 

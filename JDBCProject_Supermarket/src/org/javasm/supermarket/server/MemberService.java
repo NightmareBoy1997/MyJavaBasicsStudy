@@ -24,4 +24,5 @@ public interface MemberService {
 
     void updateMember(Member member);
 
+    Member findMemberByNameAndPassword(String user,String password);
 }

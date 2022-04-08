@@ -5,9 +5,11 @@ import org.javasm.supermarket.dao.MemberDao;
 import org.javasm.supermarket.dao.impl.MemberDaoImpl;
 import org.javasm.supermarket.server.MemberService;
 import org.javasm.supermarket.util.CacheUtil;
+import org.javasm.supermarket.util.MD5Util;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @projectName: MyJavaStudy
@@ -20,7 +22,7 @@ import java.util.List;
  */
 public class MemberServiceImpl implements MemberService {
     static final private MemberDao memberDao = new MemberDaoImpl();
-    static  private List<Member> allMember = CacheUtil.getAllCacheList(Member.class);
+    static private List<Member> allMember = CacheUtil.getAllCacheList(Member.class);
 
     @Override
     public void addAndDeleteMember(Member member) {
@@ -32,10 +34,8 @@ public class MemberServiceImpl implements MemberService {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
     }
-
-
-
 
 
     @Override
@@ -46,7 +46,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public List<Member> selectMemberByPage(int page, int size) {
         try {
-            return memberDao.selectMemberByPage((page - 1)*size , size);
+            return memberDao.selectMemberByPage((page - 1) * size, size);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -64,6 +64,21 @@ public class MemberServiceImpl implements MemberService {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+    }
+
+    @Override
+    public Member findMemberByNameAndPassword(String user, String password) {
+        final List<Member> memberUser = allMember.stream().filter(m -> m.getName().equals(user)).collect(Collectors.toList());
+        if (memberUser.isEmpty()) {
+            System.out.println("不存在此会员账户信息");
+            return null;
+        }
+        Member member = memberUser.get(0);
+        if (!member.getPassword().equals(MD5Util.getMD5Password(password))) {
+            System.out.println("密码错误！");
+            return null;
+        }
+        return member;
     }
 
 

@@ -23,12 +23,12 @@ public class NewThread3Test {
 
         // 4.将此Callable接口实现类的对象作为传递到FutureTask构造器中，创建FutureTask的对象
         var futureTask1 = new FutureTask<Double>(call);
-        // 特别说明： 不同于Runnable接口，一个FutureTask是一个任务，只能由线程执行一次。 创建多个线程需要新 new FutureTask，新建任务
+        // 特别说明： 不同于Runnable接口，一个FutureTask是call的一个任务分支，
+        // 同一个线程Callable可由一个或多个异步任务协同完成。
         var futureTask2 = new FutureTask<Double>(call);
         // 与线程池的线程是同一任务，线程已启动，再启动就无意义
 //        var thread1 = new Thread(futureTask);
 //        var thread2 = new Thread(futureTask);
-//        var thread3 = new Thread(futureTask);
 
         // 5.将FutureTask的对象作为参数传递到Thread类的构造器中，创建Thread对象，并调用start()
         var thread1 = new Thread(futureTask1);
@@ -45,11 +45,13 @@ public class NewThread3Test {
             //6.获取Callable中call方法的返回值
             //get()返回值即为FutureTask构造器参数Callable实现类重写的call()的返回值。
             money = futureTask1.get();
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+
         System.out.println("总营业额： " + money);
     }
 }
@@ -57,10 +59,9 @@ public class NewThread3Test {
 
 // 1.创建一个实现Callable的实现类
 class NewThread3 implements Callable<Double> {
-    private static Lock lock = new ReentrantLock();
-    static int number = 100;
-    static double money;
-    static boolean flag = true;
+    private Lock lock = new ReentrantLock();
+    int number = 100;
+    double money;
 
     // 2.实现call方法，将此线程需要执行的操作声明在call()中
     public Double call() {

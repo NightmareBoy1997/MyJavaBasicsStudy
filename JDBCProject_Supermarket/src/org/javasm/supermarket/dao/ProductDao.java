@@ -28,4 +28,6 @@ public interface ProductDao {
 
     void update(Connection connection , Product product) throws SQLException;
 
+    Product findProductById(Connection connection , int productId) throws SQLException;
+
 }
